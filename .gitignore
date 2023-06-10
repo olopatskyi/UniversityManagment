@@ -1,0 +1,32 @@
+# .NET Core and Visual Studio files
+*.dll
+*.exe
+*.pdb
+*.userprefs
+*.suo
+*.cache
+*.log
+*.vs
+bin/
+obj/
+TestResults/
+
+# Rider-specific files
+.idea/
+*.sln.iml
+.rider/
+[Rr]eSharper
+
+# NuGet packages
+*.nuget.props
+*.nuget.targets
+Packages/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Oo][Uu][Tt]/
