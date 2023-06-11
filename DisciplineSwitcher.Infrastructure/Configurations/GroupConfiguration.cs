@@ -15,7 +15,5 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
         builder.HasOne(x => x.Faculty)
             .WithMany(x=>x.Groups)
             .HasForeignKey(x=>x.FacultyId);
-
-        builder.HasMany(x => x.Disciplines);
     }
 }

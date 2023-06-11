@@ -1,9 +1,12 @@
+using DisciplineSwitcher.Infrastructure.DataAccess;
+
 namespace DisciplineSwitcher.WebApi;
 
 public class Program
 {
     public static void Main(string[] args)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         CreateHostBuilder(args).Build().Run();
     }
 

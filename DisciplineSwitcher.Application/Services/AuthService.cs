@@ -86,6 +86,7 @@ public class AuthService : IAuthService
 
         var identity = new ClaimsIdentity(new[]
         {
+            new Claim("Id", user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email!),
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim(ClaimTypes.Role, roles[0]),

@@ -11,6 +11,4 @@ public class Group : BaseEntity
     public ICollection<Student>? Students { get; set; }
 
     public ICollection<Teacher>? Teachers { get; set; }
-
-    public ICollection<Discipline>? Disciplines { get; set; }
 }

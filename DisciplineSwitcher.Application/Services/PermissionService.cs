@@ -43,7 +43,7 @@ public class PermissionService : IPermissionService
     
     private bool HasPermission(string permission)
     {
-        var scopes = _httpContextAccessor.HttpContext.User.Claims
+        var scopes = _httpContextAccessor.HttpContext!.User.Claims
             .Where(c => c.Type == "scopes")
             .SelectMany(c => c.Value.Split(','));
 

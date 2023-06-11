@@ -3,10 +3,8 @@ using DisciplineSwitcher.Application.Services;
 using DisciplineSwitcher.Application.Shared;
 using DisciplineSwitcher.Domain.Entities;
 using DisciplineSwitcher.Infrastructure.DataAccess;
-using DisciplineSwitcher.Infrastructure.Migrations;
 using DisciplineSwitcher.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DisciplineSwitcher.Application.Extensions;
@@ -55,8 +53,12 @@ public static class DependencyInjection
         serviceCollection.AddScoped<AppRoleManager>();
         
         serviceCollection.AddScoped<IAuthService, AuthService>();
+        serviceCollection.AddScoped<IDisciplineService, DisciplineService>();
+        serviceCollection.AddScoped<ISemesterService, SemesterService>();
+        serviceCollection.AddScoped<IGroupService, GroupService>();
+        serviceCollection.AddScoped<IFacultyService, FacultyService>();
         serviceCollection.AddSingleton<IPermissionService, PermissionService>();
-        
+
         return serviceCollection;
     }
 

@@ -24,6 +24,8 @@ public class DatabaseContext : IdentityDbContext<IdentityUser<Guid>, IdentityRol
 
     public DbSet<Student> Students { get; set; }
 
+    public DbSet<StudentDiscipline> StudentDisciplines { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(DatabaseContext))!);

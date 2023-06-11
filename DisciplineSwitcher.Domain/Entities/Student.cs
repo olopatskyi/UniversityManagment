@@ -7,4 +7,6 @@ public class Student : IdentityUser<Guid>
     public Guid? GroupId { get; set; }
     
     public Group? Group { get; set; }
+
+    public ICollection<Discipline>? Disciplines { get; set; }
 }

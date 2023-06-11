@@ -5,4 +5,6 @@ namespace DisciplineSwitcher.Domain.Entities;
 public class Teacher : IdentityUser<Guid>
 {
     public ICollection<Group>? Groups { get; set; }
+
+    public ICollection<Discipline>? Disciplines { get; set; }
 }

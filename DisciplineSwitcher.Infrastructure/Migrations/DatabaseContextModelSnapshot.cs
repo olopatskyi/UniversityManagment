@@ -22,19 +22,19 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DisciplineGroup", b =>
+            modelBuilder.Entity("DisciplineStudent", b =>
                 {
                     b.Property<Guid>("DisciplinesId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("GroupsId")
+                    b.Property<Guid>("StudentsId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("DisciplinesId", "GroupsId");
+                    b.HasKey("DisciplinesId", "StudentsId");
 
-                    b.HasIndex("GroupsId");
+                    b.HasIndex("StudentsId");
 
-                    b.ToTable("DisciplineGroup");
+                    b.ToTable("DisciplineStudent");
                 });
 
             modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.Discipline", b =>
@@ -43,7 +43,14 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid>("SemesterId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TeacherId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Title")
@@ -53,6 +60,8 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SemesterId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Disciplines");
                 });
@@ -101,12 +110,39 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.ToTable("Semesters");
+                });
+
+            modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.StudentDiscipline", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DisciplineId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisciplineId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentDisciplines");
                 });
 
             modelBuilder.Entity("GroupTeacher", b =>
@@ -154,21 +190,21 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e"),
-                            ConcurrencyStamp = "5b7ec08c-c0df-4e73-b268-7f744dbbc7c1",
+                            ConcurrencyStamp = "7822dda2-9594-439a-87df-202c5a6afe24",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136"),
-                            ConcurrencyStamp = "298115c4-13db-4d44-ae22-02715bc01489",
+                            ConcurrencyStamp = "7dc68bce-3a0f-4b40-a7af-15a9c6a3b3f4",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
                             Id = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f"),
-                            ConcurrencyStamp = "0bd11313-98d0-41ea-a7b3-4fbc27280bf3",
+                            ConcurrencyStamp = "aad86da0-a9d3-4079-93df-61f365239f77",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         });
@@ -559,13 +595,13 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         {
                             Id = new Guid("672979c9-d851-4bb7-83b6-a75e906dbefa"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ab03d0ad-4f8e-4f49-8890-74ede9c859cd",
+                            ConcurrencyStamp = "a56a7470-00b1-4090-b085-8586df14148a",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEPxnD0DkKjZvyevhbeLWSlXsUiP9y2U2YmBDXbEyILCM53gbworPwpTzCJGpAV+2Wg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELdHfYATd8uQz8BUhnli68kmKgz6maE6bwsVhnpDpSF26r3qClQiSvQSy6Zd+JMcmQ==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "408d2bb5-097f-4abe-9143-c78164ee0b1a",
+                            SecurityStamp = "1ccd41cb-faa8-481a-82f7-2bfce01e8f19",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -688,13 +724,13 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         {
                             Id = new Guid("537826d9-90b5-4d70-9606-addbd078d509"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f26a85ce-64b0-4d0a-8909-f4e28982f478",
+                            ConcurrencyStamp = "9cd54cec-ae67-4f48-9fe7-8f6c1576d2a2",
                             Email = "artur.bondar@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEELP6H3qebiJTsrdAbiA8dHReL1f77L/ZUAb2HT51QRE+fI62GPw71YnFrF+dJk+cQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECKfk8CwzNqJEHvYV1gXq04m2gEL85CfkNCTKlake9CfRzJfd+oMR4qduDFL4X55eA==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "dc744de3-c207-4a1e-a4a9-1d26844813a2",
+                            SecurityStamp = "16f2a9b9-6f89-4854-90ae-1a362c10b8fb",
                             TwoFactorEnabled = false,
                             UserName = "Artur Bondar"
                         });
@@ -716,19 +752,19 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         {
                             Id = new Guid("bebdddb7-27ab-4513-8ba7-a3eefcc7772b"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "07291ec9-9a36-4258-99bb-11dec113764a",
+                            ConcurrencyStamp = "7f6b2379-6a90-4021-af5a-58733f57ddf7",
                             Email = "volodymyr.tymofiyovych@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAELQ4L0sOYYXwNMS2ZNvPujTmJlX0Ywia0Drmw9D6GNVDoE/sN3ph5SzjCsjMJ94c9A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG9Bd4b4iuhyIcfAm77hDbb5Ra6ebJKUnibU4Muomi7reRFYIkEZBv1AzCBjBtSu4g==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "8ba2e92d-93b0-4df3-ad7a-58833bb30201",
+                            SecurityStamp = "315044fc-eaf8-41e6-b79d-9c876c29bdc7",
                             TwoFactorEnabled = false,
                             UserName = "Volodymyr Tymofiyovych"
                         });
                 });
 
-            modelBuilder.Entity("DisciplineGroup", b =>
+            modelBuilder.Entity("DisciplineStudent", b =>
                 {
                     b.HasOne("DisciplineSwitcher.Domain.Entities.Discipline", null)
                         .WithMany()
@@ -736,9 +772,9 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DisciplineSwitcher.Domain.Entities.Group", null)
+                    b.HasOne("DisciplineSwitcher.Domain.Entities.Student", null)
                         .WithMany()
-                        .HasForeignKey("GroupsId")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -751,7 +787,15 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DisciplineSwitcher.Domain.Entities.Teacher", "Teacher")
+                        .WithMany("Disciplines")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Semester");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.Group", b =>
@@ -763,6 +807,25 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Faculty");
+                });
+
+            modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.StudentDiscipline", b =>
+                {
+                    b.HasOne("DisciplineSwitcher.Domain.Entities.Discipline", "Discipline")
+                        .WithMany()
+                        .HasForeignKey("DisciplineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DisciplineSwitcher.Domain.Entities.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Discipline");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("GroupTeacher", b =>
@@ -878,6 +941,11 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.Semester", b =>
+                {
+                    b.Navigation("Disciplines");
+                });
+
+            modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.Teacher", b =>
                 {
                     b.Navigation("Disciplines");
                 });

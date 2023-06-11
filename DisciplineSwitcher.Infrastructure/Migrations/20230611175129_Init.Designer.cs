@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DisciplineSwitcher.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230610125719_AddTestData")]
-    partial class AddTestData
+    [Migration("20230611175129_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,19 +25,19 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DisciplineGroup", b =>
+            modelBuilder.Entity("DisciplineStudent", b =>
                 {
                     b.Property<Guid>("DisciplinesId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("GroupsId")
+                    b.Property<Guid>("StudentsId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("DisciplinesId", "GroupsId");
+                    b.HasKey("DisciplinesId", "StudentsId");
 
-                    b.HasIndex("GroupsId");
+                    b.HasIndex("StudentsId");
 
-                    b.ToTable("DisciplineGroup");
+                    b.ToTable("DisciplineStudent");
                 });
 
             modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.Discipline", b =>
@@ -46,7 +46,14 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid>("SemesterId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TeacherId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Title")
@@ -56,6 +63,8 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SemesterId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Disciplines");
                 });
@@ -104,12 +113,39 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.ToTable("Semesters");
+                });
+
+            modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.StudentDiscipline", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DisciplineId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisciplineId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentDisciplines");
                 });
 
             modelBuilder.Entity("GroupTeacher", b =>
@@ -157,17 +193,23 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e"),
-                            Name = "Admin"
+                            ConcurrencyStamp = "7822dda2-9594-439a-87df-202c5a6afe24",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136"),
-                            Name = "Student"
+                            ConcurrencyStamp = "7dc68bce-3a0f-4b40-a7af-15a9c6a3b3f4",
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
                         },
                         new
                         {
                             Id = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f"),
-                            Name = "Teacher"
+                            ConcurrencyStamp = "aad86da0-a9d3-4079-93df-61f365239f77",
+                            Name = "Teacher",
+                            NormalizedName = "TEACHER"
                         });
                 });
 
@@ -198,289 +240,289 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         new
                         {
                             Id = 49,
-                            ClaimType = "student:get",
+                            ClaimType = "get:student",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 50,
-                            ClaimType = "student:create",
+                            ClaimType = "create:student",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 51,
-                            ClaimType = "student:delete",
+                            ClaimType = "delete:student",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 52,
-                            ClaimType = "student:update",
+                            ClaimType = "update:student",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 53,
-                            ClaimType = "teacher:get",
+                            ClaimType = "get:teacher",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 54,
-                            ClaimType = "teacher:create",
+                            ClaimType = "create:teacher",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 55,
-                            ClaimType = "teacher:delete",
+                            ClaimType = "delete:teacher",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 56,
-                            ClaimType = "teacher:update",
+                            ClaimType = "update:teacher",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 57,
-                            ClaimType = "discipline:get",
+                            ClaimType = "get:discipline",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 58,
-                            ClaimType = "discipline:create",
+                            ClaimType = "create:discipline",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 59,
-                            ClaimType = "discipline:delete",
+                            ClaimType = "delete:discipline",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 60,
-                            ClaimType = "discipline:update",
+                            ClaimType = "update:discipline",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 61,
-                            ClaimType = "faculty:get",
+                            ClaimType = "get:faculty",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 62,
-                            ClaimType = "faculty:create",
+                            ClaimType = "create:faculty",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 63,
-                            ClaimType = "faculty:delete",
+                            ClaimType = "delete:faculty",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 64,
-                            ClaimType = "faculty:update",
+                            ClaimType = "update:faculty",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 65,
-                            ClaimType = "semester:get",
+                            ClaimType = "get:semester",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 66,
-                            ClaimType = "semester:create",
+                            ClaimType = "create:semester",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 67,
-                            ClaimType = "semester:delete",
+                            ClaimType = "delete:semester",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 68,
-                            ClaimType = "semester:update",
+                            ClaimType = "update:semester",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 69,
-                            ClaimType = "group:get",
+                            ClaimType = "get:group",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 70,
-                            ClaimType = "group:create",
+                            ClaimType = "create:group",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 71,
-                            ClaimType = "group:delete",
+                            ClaimType = "delete:group",
                             RoleId = new Guid("d522e6ae-a0d5-4753-8bf1-feb30e3b535e")
                         },
                         new
                         {
                             Id = 72,
-                            ClaimType = "student:get",
+                            ClaimType = "get:student",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 73,
-                            ClaimType = "student:update",
+                            ClaimType = "update:student",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 74,
-                            ClaimType = "teacher:get",
+                            ClaimType = "get:teacher",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 75,
-                            ClaimType = "teacher:create",
+                            ClaimType = "create:teacher",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 76,
-                            ClaimType = "teacher:update",
+                            ClaimType = "update:teacher",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 77,
-                            ClaimType = "teacher:delete",
+                            ClaimType = "delete:teacher",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 78,
-                            ClaimType = "discipline:get",
+                            ClaimType = "get:discipline",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 79,
-                            ClaimType = "discipline:create",
+                            ClaimType = "create:discipline",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 80,
-                            ClaimType = "discipline:update",
+                            ClaimType = "update:discipline",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 81,
-                            ClaimType = "discipline:delete",
+                            ClaimType = "delete:discipline",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 82,
-                            ClaimType = "faculty:get",
+                            ClaimType = "get:faculty",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 83,
-                            ClaimType = "semester:get",
+                            ClaimType = "get:semester",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 84,
-                            ClaimType = "group:get",
+                            ClaimType = "get:group",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 85,
-                            ClaimType = "group:create",
+                            ClaimType = "create:group",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 86,
-                            ClaimType = "group:update",
+                            ClaimType = "update:group",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 87,
-                            ClaimType = "group:delete",
+                            ClaimType = "delete:group",
                             RoleId = new Guid("104adc6e-eb7e-40ee-832c-64b2198b0e6f")
                         },
                         new
                         {
                             Id = 88,
-                            ClaimType = "student:get",
+                            ClaimType = "get:student",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         },
                         new
                         {
                             Id = 89,
-                            ClaimType = "student:create",
+                            ClaimType = "create:student",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         },
                         new
                         {
                             Id = 90,
-                            ClaimType = "student:delete",
+                            ClaimType = "delete:student",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         },
                         new
                         {
                             Id = 91,
-                            ClaimType = "student:update",
+                            ClaimType = "update:student",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         },
                         new
                         {
                             Id = 92,
-                            ClaimType = "teacher:get",
+                            ClaimType = "get:teacher",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         },
                         new
                         {
                             Id = 93,
-                            ClaimType = "discipline:get",
+                            ClaimType = "get:discipline",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         },
                         new
                         {
                             Id = 94,
-                            ClaimType = "faculty:get",
+                            ClaimType = "get:faculty",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         },
                         new
                         {
                             Id = 95,
-                            ClaimType = "semester:get",
+                            ClaimType = "get:semester",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         },
                         new
                         {
                             Id = 96,
-                            ClaimType = "group:get",
+                            ClaimType = "get:group",
                             RoleId = new Guid("7a7231fb-fe42-40df-bf8b-1adcb564a136")
                         });
                 });
@@ -556,12 +598,13 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         {
                             Id = new Guid("672979c9-d851-4bb7-83b6-a75e906dbefa"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bded3de8-0e1c-4b77-9ff3-68f44fc04020",
+                            ConcurrencyStamp = "a56a7470-00b1-4090-b085-8586df14148a",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAELJBE7rHYMnGA2lMhtFGCXWJogSdMlypY12/Sa69idXSSLVFKpvkHuKiin/yJsFp8w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELdHfYATd8uQz8BUhnli68kmKgz6maE6bwsVhnpDpSF26r3qClQiSvQSy6Zd+JMcmQ==",
                             PhoneNumberConfirmed = true,
+                            SecurityStamp = "1ccd41cb-faa8-481a-82f7-2bfce01e8f19",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -684,12 +727,13 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         {
                             Id = new Guid("537826d9-90b5-4d70-9606-addbd078d509"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "26c8f946-0ace-4e40-aa0a-904cad133d5a",
+                            ConcurrencyStamp = "9cd54cec-ae67-4f48-9fe7-8f6c1576d2a2",
                             Email = "artur.bondar@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEAJovClLV1kVqnaqy3ugAxGSx5Wjdh2rMnEW7AWgpNG+NSSwxVcCtRNLEjCFdlAG0w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECKfk8CwzNqJEHvYV1gXq04m2gEL85CfkNCTKlake9CfRzJfd+oMR4qduDFL4X55eA==",
                             PhoneNumberConfirmed = true,
+                            SecurityStamp = "16f2a9b9-6f89-4854-90ae-1a362c10b8fb",
                             TwoFactorEnabled = false,
                             UserName = "Artur Bondar"
                         });
@@ -711,18 +755,19 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         {
                             Id = new Guid("bebdddb7-27ab-4513-8ba7-a3eefcc7772b"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f96057e4-d034-48c8-a5a3-14065567b669",
+                            ConcurrencyStamp = "7f6b2379-6a90-4021-af5a-58733f57ddf7",
                             Email = "volodymyr.tymofiyovych@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEO706KEGCy0l1rsTQK/rni0lXoej250koSlPCjieVP1QZxz5j9EZ4uK6ebIWiYVfaQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG9Bd4b4iuhyIcfAm77hDbb5Ra6ebJKUnibU4Muomi7reRFYIkEZBv1AzCBjBtSu4g==",
                             PhoneNumberConfirmed = true,
+                            SecurityStamp = "315044fc-eaf8-41e6-b79d-9c876c29bdc7",
                             TwoFactorEnabled = false,
                             UserName = "Volodymyr Tymofiyovych"
                         });
                 });
 
-            modelBuilder.Entity("DisciplineGroup", b =>
+            modelBuilder.Entity("DisciplineStudent", b =>
                 {
                     b.HasOne("DisciplineSwitcher.Domain.Entities.Discipline", null)
                         .WithMany()
@@ -730,9 +775,9 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DisciplineSwitcher.Domain.Entities.Group", null)
+                    b.HasOne("DisciplineSwitcher.Domain.Entities.Student", null)
                         .WithMany()
-                        .HasForeignKey("GroupsId")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -745,7 +790,15 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DisciplineSwitcher.Domain.Entities.Teacher", "Teacher")
+                        .WithMany("Disciplines")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Semester");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.Group", b =>
@@ -757,6 +810,25 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Faculty");
+                });
+
+            modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.StudentDiscipline", b =>
+                {
+                    b.HasOne("DisciplineSwitcher.Domain.Entities.Discipline", "Discipline")
+                        .WithMany()
+                        .HasForeignKey("DisciplineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DisciplineSwitcher.Domain.Entities.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Discipline");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("GroupTeacher", b =>
@@ -872,6 +944,11 @@ namespace DisciplineSwitcher.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.Semester", b =>
+                {
+                    b.Navigation("Disciplines");
+                });
+
+            modelBuilder.Entity("DisciplineSwitcher.Domain.Entities.Teacher", b =>
                 {
                     b.Navigation("Disciplines");
                 });

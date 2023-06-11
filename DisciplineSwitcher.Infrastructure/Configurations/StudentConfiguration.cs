@@ -14,6 +14,9 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.HasOne(x => x.Group)
             .WithMany(x => x.Students)
             .HasForeignKey(x => x.GroupId);
+
+        builder.HasMany(x => x.Disciplines)
+            .WithMany(x => x.Students);
         
         PasswordHasher<Student> hasher = new PasswordHasher<Student>();
         

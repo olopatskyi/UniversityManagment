@@ -1,9 +1,17 @@
+using DisciplineSwitcher.Application.Interfaces;
+using DisciplineSwitcher.Application.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/v1/semesters")]
 public class SemestersController : ControllerBase
 {
+    private readonly ISemesterService _semesterService;
+
+    public SemestersController(ISemesterService semesterService)
+    {
+        _semesterService = semesterService;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAllSemesters()
@@ -18,9 +26,10 @@ public class SemestersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateSemester()
+    public async Task<IActionResult> CreateSemester([FromBody] CreateSemesterVm model)
     {
-        return Ok();
+        var result = await _semesterService.CreateAsync(model);
+        return Created("api/v1/semesters", result);
     }
 
     [HttpPut("{id}")]

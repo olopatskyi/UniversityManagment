@@ -7,38 +7,40 @@ namespace DisciplineSwitcher.Infrastructure.Repository;
 
 public class UnitOfWork : IUnitOfWork
 {
-    /*private readonly IRepository<Client> _clientRepository;
-    private readonly IRepository<Booking> _bookingRepository;
-    private readonly IRepository<Rank> _rankRepository;
-    private readonly IRepository<Barber> _barberRepository;
-    private readonly IRepository<Service> _serviceRepository;
+    private readonly IRepository<Group> _groupRepository;
+    private readonly IRepository<Discipline> _disciplineRepository;
+    private readonly IRepository<Faculty> _facultyRepository;
+    private readonly IRepository<Semester> _semesterRepository;
+    private readonly IRepository<StudentDiscipline> _studentDisciplineRepository;
+
 
     private readonly DatabaseContext _databaseContext;
 
-    public UnitOfWork(DatabaseContext databaseContext, IRepository<Client> clientRepository,
-        IRepository<Booking> bookingRepository, IRepository<Rank> rankRepository, IRepository<Barber> barberRepository, IRepository<Service> serviceRepository)
+    public UnitOfWork(IRepository<Group> groupRepository, IRepository<Discipline> disciplineRepository,
+        IRepository<Faculty> facultyRepository, IRepository<Semester> semesterRepository,
+        DatabaseContext databaseContext, IRepository<StudentDiscipline> studentDisciplineRepository)
     {
+        _groupRepository = groupRepository;
+        _disciplineRepository = disciplineRepository;
+        _facultyRepository = facultyRepository;
+        _semesterRepository = semesterRepository;
         _databaseContext = databaseContext;
-        _clientRepository = clientRepository;
-        _bookingRepository = bookingRepository;
-        _rankRepository = rankRepository;
-        _barberRepository = barberRepository;
-        _serviceRepository = serviceRepository;
+        _studentDisciplineRepository = studentDisciplineRepository;
     }
 
-    public IRepository<Client> ClientRepository => _clientRepository ?? new Repository<Client>(_databaseContext);
+    public IRepository<Group> GroupRepository => _groupRepository;
 
-    public IRepository<Booking> BookingRepository => _bookingRepository ?? new Repository<Booking>(_databaseContext);
+    public IRepository<Discipline> DisciplineRepository => _disciplineRepository;
 
-    public IRepository<Rank> RankRepository => _rankRepository ?? new Repository<Rank>(_databaseContext);
+    public IRepository<Faculty> FacultyRepository => _facultyRepository;
 
-    public IRepository<Barber> BarberRepository => _barberRepository ?? new Repository<Barber>(_databaseContext);
+    public IRepository<Semester> SemesterRepository => _semesterRepository;
 
-    public IRepository<Service> ServiceRepository => _serviceRepository ?? new Repository<Service>(_databaseContext);*/
+    public IRepository<StudentDiscipline> StudentDisciplineRepository => _studentDisciplineRepository;
 
     public async Task SaveAsync()
     {
-        /*await _databaseContext.SaveChangesAsync();*/
+        await _databaseContext.SaveChangesAsync();
     }
 
     public void Dispose()
@@ -46,7 +48,7 @@ public class UnitOfWork : IUnitOfWork
         Dispose(true);
         GC.SuppressFinalize(this);
     }
-    
+
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
